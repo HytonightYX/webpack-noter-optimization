@@ -1,57 +1,96 @@
 const path = require('path')
-const HtmlWebpackPlugin = require("html-webpack-plugin")
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-
+const HappyPack = require('happypack')
+const os = require('os')
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const srcDir = path.join(__dirname, '../src')
 const publicDir = path.join(__dirname, '../public')
+const devMode = process.env.NODE_ENV !== 'production'
+
+function resolve(relatedPath) {
+  return path.join(__dirname, relatedPath)
+}
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    client: resolve('../src/index.js')
+  },
+  output: {
+    path: resolve('../dist'),
+    filename: devMode ? 'js/[name].[hash].js' : 'js/[name].[contenthash].js',
+    chunkFilename: devMode ? 'chunks/[name].[hash:4].js' : 'chunks/[name].[contenthash].js',
+  },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: "happypack/loader?id=happyBabel"
         }
       },
       {
-        test: /\.html$/,
+        test: /\.less$/,
         use: [
+          "style-loader",
+          "css-loader",
+          "postcss-loader",
           {
-            loader: "html-loader"
+            loader: "less-loader", options: {
+              javascriptEnabled: true
+            }
           }
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "postcss-loader"
         ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        use: ["url-loader"],
+        // exclude: /node_modules/,
+        loader: 'url-loader',
+        options: {
+          limit: 8192,
+          name: '[name].[hash:4].[ext]',
+          outputPath: '/img'
+        }
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
-        ]
-      }
+        test: /\.(woff|woff2|eot|ttf|svg|gif)$/,
+        loader: 'url-loader',
+        exclude: /node_modules/,
+        options: {
+          limit: 8192,
+          name: 'font/[name].[hash:4].[ext]'
+        }
+      },
     ]
   },
-  output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'bundle.js'
-  },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      filename: 'index.html',
-      favicon: './public/favicon.ico'
+    new MiniCssExtractPlugin({
+      filename: devMode ? 'css/style.css' : 'css/style.[contenthash].css',
+      chunkFilename: devMode ? 'css/style.[id].css' : 'css/style.[contenthash].[id].css'
     }),
-    new CleanWebpackPlugin()
+    new HappyPack({
+      //用id来标识 happypack处理那一类文件
+      id: 'happyBabel',
+      //如何处理  用法和loader 的配置一样
+      loaders: [{
+        loader: 'babel-loader',
+        options: {
+          // babelrc: true,
+          cacheDirectory: true // 启用缓存
+        }
+      }],
+      //代表共享进程池，即多个 HappyPack 实例都使用同一个共享进程池中的子进程去处理任务，以防止资源占用过多。
+      threadPool: happyThreadPool,
+      //允许 HappyPack 输出日志
+      verbose: false,
+    })
   ]
 }

@@ -5,7 +5,7 @@ import NavWrapper from './component/NavWrapper'
 import WaitingComponent from './component/WaitingComponent'
 import lazy from './util/lazy'
 
-import 'semantic-ui-css/semantic.min.css'
+// import 'semantic-ui-css/semantic.min.css'
 import './style/global.less'
 
 import Note from './page/note'
@@ -31,20 +31,20 @@ class App extends React.Component {
 		return (
 			<Router history={history}>
 				<div className='app-root'>
-					<NavWrapper/>
+					<NavWrapper />
 
 					<div className="g-content">
 						<LoginGuard>
 							<Switch>
-								<Route exact path='/' component={WaitingComponent(Find)}/>
-								<Route exact path='/login' component={WaitingComponent(Login)}/>
-								<Route exact path='/find' component={WaitingComponent(Find)}/>
-								<Route exact path='/write' component={WaitingComponent(Write)}/>
-								<Route exact path='/mynote' component={WaitingComponent(MyNote)}/>
-								<Route exact path='/profile' component={WaitingComponent(Profile)}/>
-								<Route exact path='/note/:id' component={WaitingComponent(Note)}/>
-								<Route exact path='/edit/:id' component={Edit}/>
-								<Route exact path='/setting' component={WaitingComponent(Setting)}/>
+								<Route exact path='/' component={WaitingComponent(Find)} />
+								<Route exact path='/login' component={WaitingComponent(Login)} />
+								<Route exact path='/find' component={WaitingComponent(Find)} />
+								<Route exact path='/write' component={WaitingComponent(Write)} />
+								<Route exact path='/mynote' component={WaitingComponent(MyNote)} />
+								<Route exact path='/profile' component={WaitingComponent(Profile)} />
+								<Route exact path='/note/:id' component={WaitingComponent(Note)} />
+								<Route exact path='/edit/:id' component={Edit} />
+								<Route exact path='/setting' component={WaitingComponent(Setting)} />
 							</Switch>
 						</LoginGuard>
 					</div>

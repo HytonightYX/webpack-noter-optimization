@@ -4,6 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpackCommonConf = require('./webpack.common')
 const { smart } = require('webpack-merge')
 // const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const srcDir = path.join(__dirname, '../src')
 
@@ -43,7 +44,6 @@ module.exports = smart(webpackCommonConf, {
     compress: true,
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
