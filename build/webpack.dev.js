@@ -10,32 +10,6 @@ const srcDir = path.join(__dirname, '../src')
 
 module.exports = smart(webpackCommonConf, {
   mode: 'development',
-  module: {
-    rules: [
-      {
-        test: /\.less$/,
-        use: [
-          "style-loader",
-          "css-loader",
-          "postcss-loader",
-          {
-            loader: "less-loader", options: {
-              javascriptEnabled: true
-            }
-          }
-        ],
-      },
-      {
-        test: /\.css$/,
-        use: [
-          "style-loader",
-          "css-loader",
-          "postcss-loader"
-        ]
-      },
-
-    ]
-  },
   devServer: { // 本地服务配置
     port: 9000,
     hot: true,
