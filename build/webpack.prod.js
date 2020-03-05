@@ -53,6 +53,12 @@ module.exports = smart(webpackCommonConf, {
           test: /node_modules/,
           minSize: 0,
           minChunks: 1
+        },
+        common: {
+          name: 'common',
+          priority: 0,
+          minSize: 0,
+          minChunks: 2
         }
       }
     }

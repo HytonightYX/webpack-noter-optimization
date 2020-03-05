@@ -143,9 +143,48 @@ https://segmentfault.com/a/1190000020320871
 
 ## 代码分割
 
+第三方库单独打包有几个好处。
+
+首先，第三方库其实改动不大的，经常改的其实是我们业务代码。所以第三方库单独打包，也就是有独有的 hash，这样做了缓存之后就能长期让用户命中强缓存，而我们业务代码改来改去也不会影响第三方库的缓存。
+
+![image-20200305132245077](http://qn-noter.yunxi.site/imagehost/cfhkc.png-style1)
+
+![image-20200305132212935](http://qn-noter.yunxi.site/imagehost/gey5r.png-style1)
+
+这么打完之后，发现其实主要还是第三方库的问题（就是你，antd）
 
 
 
+## antd图标处理
+
+```javascript
+// 安装@ant-design/icons
+// yarn add @ant-design/icons
+
+// src/icons.js
+export {
+  ArrowUpOutline,
+  EditOutline,
+  UserOutline,
+  PlusOutline,
+  LoadingOutline,
+  GithubOutline,
+  BarChartOutline,
+} from '@ant-design/icons/lib/index.es'
+
+// webpack.prod.js
+...
+resolve: {
+  alias: {
+    "@ant-design/icons/lib/dist$": path.resolve(__dirname, "./src/icons.js")
+  }
+},
+...
+```
+
+
+
+方法二：升级到 antd 4.0
 
 
 
