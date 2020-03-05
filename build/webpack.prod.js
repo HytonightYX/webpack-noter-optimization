@@ -14,6 +14,9 @@ function resolve(relatedPath) {
 
 module.exports = smart(webpackCommonConf, {
   mode: 'production',
+  output: {
+    publicPath: './',
+  },
   devtool: 'none',
   plugins: [
     // 将打包后的资源注入到html文件内
@@ -39,6 +42,19 @@ module.exports = smart(webpackCommonConf, {
         }
       }),
       new OptimizeCSSAssetsPlugin({})
-    ]
+    ],
+    splitChunks: {
+      chunks: 'all',
+
+      cacheGroups: {
+        vendor: {
+          name: 'vendor',
+          priority: 1,
+          test: /node_modules/,
+          minSize: 0,
+          minChunks: 1
+        }
+      }
+    }
   }
 })

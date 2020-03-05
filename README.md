@@ -1,3 +1,5 @@
+
+
 # webpack-noter-optimization
 
 
@@ -122,12 +124,18 @@ https://segmentfault.com/a/1190000020320871
 
 
 
+目前测一下，??? 才17分？？
+
+![image-20200305122518922](http://qn-noter.yunxi.site/imagehost/3ojbr.png-style1)
+
+
+
+
+
 目前来看还有两个问题
 
 - antd 的 icons 全量引入问题
 - 第三方库没有单独打包
-
-
 
 接下来进行代码分割。
 
@@ -135,3 +143,20 @@ https://segmentfault.com/a/1190000020320871
 
 ## 代码分割
 
+
+
+
+
+
+
+## Nginx Gzip 压缩
+
+![image-20200305131314343](http://qn-noter.yunxi.site/imagehost/tiqrv.png-style1)
+
+立竿见影
+
+![image-20200305131641917](http://qn-noter.yunxi.site/imagehost/5txq0.png-style1)
+
+速度有了一倍左右的提升。
+
+![image-20200305131729013](http://qn-noter.yunxi.site/imagehost/emeho.png-style1)

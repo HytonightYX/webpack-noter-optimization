@@ -16,8 +16,7 @@ module.exports = {
   output: {
     path: resolve('../dist'),
     filename: devMode ? 'js/[name].[hash].js' : 'js/[name].[contenthash:8].js',
-    chunkFilename: devMode ? 'chunks/[name].[hash:4].js' : 'chunks/[name].[contenthash:8].js',
-    publicPath: '/'
+    chunkFilename: devMode ? 'chunks/[name].[hash:4].js' : 'chunks/[name].[contenthash:8].js'
   },
   module: {
     rules: [
