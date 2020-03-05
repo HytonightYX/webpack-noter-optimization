@@ -199,3 +199,12 @@ resolve: {
 速度有了一倍左右的提升。
 
 ![image-20200305131729013](http://qn-noter.yunxi.site/imagehost/emeho.png-style1)
+
+
+
+
+
+
+
+坑：SVG 转 base64 无法显示+报错
+

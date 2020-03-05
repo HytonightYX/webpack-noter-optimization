@@ -1,6 +1,5 @@
 const path = require('path')
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpackCommonConf = require('./webpack.common')
 const { smart } = require('webpack-merge')
@@ -15,15 +14,10 @@ function resolve(relatedPath) {
 module.exports = smart(webpackCommonConf, {
   mode: 'production',
   output: {
-    publicPath: './',
+    publicPath: '/',
   },
   devtool: 'none',
   plugins: [
-    // 将打包后的资源注入到html文件内
-    new HtmlWebpackPlugin({
-      template: resolve('../public/index.html'),
-      favicon: resolve('../public/favicon.ico'),
-    }),
     new CleanWebpackPlugin(),
     new BundleAnalyzerPlugin({ analyzerMode: 'static' })
   ],
@@ -33,10 +27,9 @@ module.exports = smart(webpackCommonConf, {
       new TerserJSPlugin({
         // 设置缓存目录
         cache: path.resolve('.cache'),
-        parallel: 4,// 开启多进程压缩
+        parallel: 4,
         terserOptions: {
           compress: {
-            // 删除所有 conosle
             drop_console: true
           }
         }

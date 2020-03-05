@@ -1,5 +1,6 @@
 const path = require('path')
 const HappyPack = require('happypack')
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 const os = require('os')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -41,27 +42,26 @@ module.exports = {
           }]
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-        exclude: /node_modules/,
-        loader: 'url-loader',
-        options: {
-          limit: 8192,
-          name: '[name].[hash:4].[ext]',
-          outputPath: '/img'
-        }
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|svg|gif)$/,
-        loader: 'url-loader',
-        exclude: /node_modules/,
-        options: {
-          limit: 8192,
-          name: 'font/[name].[hash:4].[ext]'
-        }
+        test: /\.(png|jpg|gif|jpeg|webp|svg|eot|ttf|woff|woff2)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10240, //10K
+              esModule: false
+            }
+          }
+        ],
+        exclude: /node_modules/
       },
     ]
   },
   plugins: [
+    // 将打包后的资源注入到html文件内
+    new HtmlWebpackPlugin({
+      template: resolve('../public/index.html'),
+      favicon: resolve('../public/favicon.ico'),
+    }),
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash:8].css",
       chunkFilename: "css/[id].[contenthash:8].css"

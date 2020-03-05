@@ -1,12 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpackCommonConf = require('./webpack.common')
 const { smart } = require('webpack-merge')
-// const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-const srcDir = path.join(__dirname, '../src')
+function resolve(relatedPath) {
+  return path.join(__dirname, relatedPath)
+}
 
 module.exports = smart(webpackCommonConf, {
   mode: 'development',
@@ -16,10 +15,15 @@ module.exports = smart(webpackCommonConf, {
     open: true,
     historyApiFallback: true,
     compress: true,
+    contentBase: resolve('../src')
   },
   devtool: 'cheap-module-eval-source-map',
   plugins: [
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+      IS_DEVELOPMENT: true,
+    }),
   ],
 })
