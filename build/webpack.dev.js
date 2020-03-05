@@ -17,6 +17,7 @@ module.exports = smart(webpackCommonConf, {
     historyApiFallback: true,
     compress: true,
   },
+  devtool: 'cheap-module-eval-source-map',
   plugins: [
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()

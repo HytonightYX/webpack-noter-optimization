@@ -1,26 +1,22 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import LoginGuard from './component/LoginGuard'
 import NavWrapper from './component/NavWrapper'
 import WaitingComponent from './component/WaitingComponent'
 import lazy from './util/lazy'
 
-// import 'semantic-ui-css/semantic.min.css'
 import './style/global.less'
-
-import Note from './page/note'
-import Edit from './page/edit'
 
 const Find = lazy(() => import('./page/find'))
 const Write = lazy(() => import('./page/write'))
 const Profile = lazy(() => import('./page/profile'))
 const Login = lazy(() => import('./page/login'))
 const MyNote = lazy(() => import('./page/mynote'))
-// const Edit = lazy(() => import('./page/edit'))
+const Note = lazy(() => import('./page/note'))
+const Edit = lazy(() => import('./page/edit'))
 const Setting = lazy(() => import('./page/setting'))
 
 import history from './history'
-
 
 class App extends React.Component {
 	constructor(props) {
@@ -43,7 +39,7 @@ class App extends React.Component {
 								<Route exact path='/mynote' component={WaitingComponent(MyNote)} />
 								<Route exact path='/profile' component={WaitingComponent(Profile)} />
 								<Route exact path='/note/:id' component={WaitingComponent(Note)} />
-								<Route exact path='/edit/:id' component={Edit} />
+								<Route exact path='/edit/:id' component={WaitingComponent(Edit)} />
 								<Route exact path='/setting' component={WaitingComponent(Setting)} />
 							</Switch>
 						</LoginGuard>

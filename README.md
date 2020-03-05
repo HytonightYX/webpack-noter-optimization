@@ -14,11 +14,13 @@
 
 
 
+## 移除 semantic.min.css，采用CDN引入
 
 
-优化一：
 
-- hash 分包
+
+
+## hash标记包
 
 ```javascript
 output: {
@@ -30,5 +32,106 @@ output: {
 
 `chunkname`我的理解是未被列在`entry`中，却又需要被打包出来的文件命名配置。什么场景需要呢？我们项目就遇到过，在按需加载（异步）模块的时候，这样的文件是没有被列在`entry`中的，如使用CommonJS的方式异步加载模块：
 
+- ExtractTextPlugin：提取样式到css文件
 
+![image-20200305101609119](http://qn-noter.yunxi.site/imagehost/k8ogm.png-style1)
+
+
+
+## 打包开缓存
+
+.cache 文件夹
+
+
+
+## happypack
+
+![image-20200305102135980](http://qn-noter.yunxi.site/imagehost/8qtqg.png-style1)
+
+
+
+
+
+## 路由懒加载
+
+![image-20200305114153334](http://qn-noter.yunxi.site/imagehost/ckh1w.png-style1)
+
+```jsx
+// lazy.js 二次封装lazy
+const retry = (fn, retriesLeft = 5, interval = 500) => {
+	return new Promise((resolve, reject) => {
+		fn()
+			.then(resolve)
+			.catch((error) => {
+				setTimeout(() => {
+					if (retriesLeft === 1) {
+						reject(error)
+					} else {
+						retry(fn, retriesLeft - 1, interval).then(resolve, reject)
+					}
+				}, interval)
+			})
+	})
+}
+
+const lazy = (fn) => React.lazy(() => retry(fn))
+export default lazy
+
+// WaitingComponent
+export default (Component) => {
+	return props => (
+		<Suspense fallback={<div>Loading...</div>}>
+			<Component {...props} />
+		</Suspense>
+	)
+}
+
+// App.js
+const Find = lazy(() => import('./page/find'))
+const Write = lazy(() => import('./page/write'))
+const Profile = lazy(() => import('./page/profile'))
+const Login = lazy(() => import('./page/login'))
+const MyNote = lazy(() => import('./page/mynote'))
+const Note = lazy(() => import('./page/note'))
+const Edit = lazy(() => import('./page/edit'))
+const Setting = lazy(() => import('./page/setting'))
+
+<Route exact path='/' component={WaitingComponent(Find)} />
+...
+```
+
+
+
+
+
+## source-map
+
+https://segmentfault.com/a/1190000020320871
+
+
+
+## 阶段性成果
+
+![image-20200305114858851](http://qn-noter.yunxi.site/imagehost/o774l.png-style1)
+
+在 fast 3G 速度下，已经可以达到10s加载了
+
+![image-20200305114955719](http://qn-noter.yunxi.site/imagehost/o5y3z.png-style1)
+
+![image-20200305115105726](http://qn-noter.yunxi.site/imagehost/i5n8s.png-style1)
+
+
+
+目前来看还有两个问题
+
+- antd 的 icons 全量引入问题
+- 第三方库没有单独打包
+
+
+
+接下来进行代码分割。
+
+
+
+## 代码分割
 

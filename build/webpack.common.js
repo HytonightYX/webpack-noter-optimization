@@ -3,8 +3,6 @@ const HappyPack = require('happypack')
 const os = require('os')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const srcDir = path.join(__dirname, '../src')
-const publicDir = path.join(__dirname, '../public')
 const devMode = process.env.NODE_ENV !== 'production'
 
 function resolve(relatedPath) {
@@ -17,8 +15,9 @@ module.exports = {
   },
   output: {
     path: resolve('../dist'),
-    filename: devMode ? 'js/[name].[hash].js' : 'js/[name].[contenthash].js',
+    filename: devMode ? 'js/[name].[hash].js' : 'js/[name].[contenthash:8].js',
     chunkFilename: devMode ? 'chunks/[name].[hash:4].js' : 'chunks/[name].[contenthash:8].js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -66,7 +65,7 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash:8].css",
-      chunkFilename: "chunk/[id].[contenthash:8].css"
+      chunkFilename: "css/[id].[contenthash:8].css"
     }),
     new HappyPack({
       //用id来标识 happypack处理那一类文件
